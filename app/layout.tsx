@@ -28,7 +28,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-800`}
       >
-        {children}
+        <div className="text-white m-8 flex flex-col items-center justify-center">
+          <div className="font-sans text-4xl font-bold mb-4">PokeAPI</div>
+          {children}
+        </div>
       </body>
     </html>
   );

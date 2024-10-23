@@ -25,3 +25,11 @@ body {
     text-wrap: balance;
   }
 }
+
+.create-box {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  border-radius: 20px;
+  padding: 30px;
+}

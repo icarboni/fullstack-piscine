@@ -1,9 +1,16 @@
-export default function Home() {
-  return (
-    <div className="text-white mt-8 ml-8">
-      <div className="font-medium font-sans text-2xl font-bold">PokeAPI</div>
+import CreatePokemon from "./components/CreatePokemon";
+import Login from "./components/Login";
 
-      <div className="container"></div>
-    </div>
+export default function Home() {
+
+  const isLogged = true;
+  return (
+      <div
+        className="font-sans text-lg w-full h-full flex flex-col items-center justify-center"
+      >
+        { isLogged ?
+        <CreatePokemon/> :
+        <Login /> } 
+      </div>
   );
 }
