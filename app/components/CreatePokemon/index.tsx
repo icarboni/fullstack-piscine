@@ -6,15 +6,10 @@ import { generatePokemon } from "./hooks";
 import Image from "next/image";
 
 const CreatePokemon = () => {
-  // useEffect(() => {
-  //   fetch("https://pokeapi.co/api/v2/pokemon/ditto")
-  //     .then((response) => response.json())
-  //     .then((data) => console.log(data));
-  // }, []);
 
   const [pokemonType, setPokemonType] = useState("Normal");
   const [animalReference, setAnimalReference] = useState("Dog");
-  const [imageURL, setImageURL] = useState("");
+  const [imageURL, setImageURL] = useState("https://ai-studio-assets.limewire.media/u/dddc70f3-3723-4a0c-b9b8-498bdfcccfc9/image/6251c16c-06ad-4ad8-9379-2d0518bf3cab?Expires=1729672740&Signature=BJ~NSc0RoNtsmRMJ573PKE01fISUs89eD8HLXPrx1AnyoO42AsKWiuQkpaseScGivyUmXm63ulm8pH6g6o8bSizaRfK-32hiqBQAz8~n5ytCyxulSxCpj35iLSaFhJpyHAh~yijP2xj5t7PRUAJMrJwDq1AxdG5J697fKpn~L3MtyZzgxa9F7ZtJHjjhZrfiq9fmUPA9RMPVzeu9bDuembwVPgpZSMT1Ylk9l0tQg~zJ0lWUrqlDsnI4qEWCrEbpgysWU8C9Jk4G5vp5cczhLW01mLqgGloS3Mlxs5qhyWMi~n6gG7zW7yo~oyBZBLHRJ8aMFYyW8BRYNb1hqc1QjA__&Key-Pair-Id=K1U52DHN9E92VT");
   const [loading, setLoading] = useState(false);
   const [ buttonCliked, setButtonClicked ] = useState(false);
 
@@ -96,7 +91,6 @@ const CreatePokemon = () => {
         </div>
       </div>
 
-
       <div className="mb-4">
         Animal reference:
         <div className="relative">
@@ -115,13 +109,24 @@ const CreatePokemon = () => {
         </div>
       </div>
       <div>
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full" onClick={generateImage}>
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
+          onClick={generateImage}
+        >
           Generate Pokémon Image
         </button>
-        { (loading && buttonCliked) ?
-            <p className="text-center mt-4 text-black">Loading...</p> : 
-            <Image src={imageURL} alt="Generated Pokemon" />
-        }
+        {loading && buttonCliked ? (
+          <p className="text-center mt-4 text-black">Loading...</p>
+        ) : (
+          <div className="w-full flex justify-center mt-10">
+            <Image
+              width={300}
+              height={300}
+              src={imageURL}
+              alt="Generated Pokemon"
+            />
+          </div>
+        )}
       </div>
     </div>
   );

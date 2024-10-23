@@ -2,7 +2,6 @@
 
 export async function generatePokemon(prompt: string) : Promise<string> {
     const apiKey = process.env.LIMEWIRE_API_KEY;
-    console.log(apiKey);
     const resp = await fetch(
         `https://api.limewire.com/api/image/generation`,
         {
@@ -20,12 +19,10 @@ export async function generatePokemon(prompt: string) : Promise<string> {
           }),
         }
       );
-
       const data = await resp.json();
-      if (data.status !== 200) {
+      if (data.status !== "COMPLETED") {
         throw new Error(data.detail);
-        return "";
       }
-      console.log(data);
+      console.log(data.data.asset_url);
       return (data.data.asset_url);
 }
