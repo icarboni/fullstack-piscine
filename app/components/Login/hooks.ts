@@ -1,37 +1,17 @@
-import { cookies } from "next/headers";
+import { setSessionTokenCookie } from "./cookies/hooks";
 
 interface UserBodyProps {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 }
 
-export function setSessionTokenCookie(token: string, expiresAt: Date): void {
-  cookies().set("session", token, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    expires: expiresAt,
-    path: "/",
-  });
-}
-  
-export function deleteSessionTokenCookie(): void {
-	cookies().set("session", "", {
-		httpOnly: true,
-		sameSite: "lax",
-		secure: process.env.NODE_ENV === "production",
-		maxAge: 0,
-		path: "/"
-	});
-}
-
-export  async function callCreateUserAPI(body: UserBodyProps) {
+export async function callCreateUserAPI(body: UserBodyProps) {
   const user = await fetch(`/api/user`, {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify(body),
     headers: {
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json",
+    },
   });
 
   if (!user.ok) {
@@ -40,9 +20,11 @@ export  async function callCreateUserAPI(body: UserBodyProps) {
 
   const data = await user.json();
 
+  const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24) // Example: 24 hours from now
+
   const session = await fetch(`/api/session`, {
     method: 'POST',
-    body: JSON.stringify({ email: data.email}),
+    body: JSON.stringify({ email: data.email, expiresAt: expiresAt }),
     headers: {
       'Content-Type': 'application/json'
     }
@@ -51,12 +33,12 @@ export  async function callCreateUserAPI(body: UserBodyProps) {
     if (!session.ok) {
         throw new Error(session.statusText);
     }
-    
-    const sessionData = await session.json();
 
-    setSessionTokenCookie(sessionData.id, new Date(sessionData.expiresAt));
+  const sessionData = await session.json();
 
-    /* 
+  setSessionTokenCookie(sessionData.id, new Date(sessionData.expiresAt));
+
+  /* 
     TODO: redirect a la Home, al hacer redirect, hacer commit de las cookies(setear las cookies)
     
     TODO: Hacer un hook que compruebe la session, extraes la cookie con await request.cookies.get('session')
@@ -71,5 +53,4 @@ export  async function callCreateUserAPI(body: UserBodyProps) {
 
     TODO: Hacer en un useEffect/useMemo para que no este renderizandose todo el rato.
     */
-
 }
