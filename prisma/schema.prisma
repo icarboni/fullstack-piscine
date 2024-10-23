@@ -14,7 +14,30 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  googleId  String    @db.VarChar(255)
-  name      String    @db.VarChar(255)
+  id        String    @id @default(uuid()) @unique 
+  email     String    @unique 
+  password  String    
+
+  sessions Session[]
+  oauthTokens OAuthToken[] 
+}
+
+
+model Session {
+  id        String    @id @default(uuid()) @unique
+  email     String    
+  expiresAt DateTime
+
+  user User @relation (fields: [email], references: [email])
+
+}
+
+model OAuthToken {
+  id        String    @id @default(uuid()) @unique
+  email     String    
+  token     String    
+  expiresAt DateTime
+  type      String
+
+  user User @relation (fields: [email], references: [email])
 }
